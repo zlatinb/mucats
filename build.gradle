@@ -24,6 +24,7 @@ apply plugin:"com.bertramlabs.asset-pipeline"
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
+    maven { url "https://repo.grails.org/grails/plugins" }
 }
 
 configurations {
@@ -38,6 +39,7 @@ dependencies {
     compile "com.muwire:core:${muWireVersion}"
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+    compile "org.grails.plugins:spring-security-core:4.0.0"
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.grails:grails-core"
