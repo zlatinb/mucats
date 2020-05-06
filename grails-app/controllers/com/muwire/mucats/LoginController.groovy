@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus
 import net.i2p.crypto.DSAEngine
 import net.i2p.data.Base64
 import net.i2p.data.Signature
+import net.i2p.data.DataHelper
 
 import java.security.SecureRandom
 import java.nio.charset.StandardCharsets
@@ -42,7 +43,7 @@ class LoginController {
 
         def model = [:]
         model['challenge'] = challengeString
-        model['shortID'] = persona.getHumanReadableName()
+        model['shortID'] = DataHelper.escapeHTML(persona.getHumanReadableName())
 
         render(view : "challenge", model : model)
     }
@@ -80,7 +81,7 @@ class LoginController {
             redirect action : "index"
         } else {
             def model = [:]
-            model['shortID'] = p.getHumanReadableName()
+            model['shortID'] = DataHelper.escapeHTML(p.getHumanReadableName())
             render(view : "welcome", model : model)
         }
     }
