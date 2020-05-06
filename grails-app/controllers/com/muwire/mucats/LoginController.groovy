@@ -14,7 +14,7 @@ import com.muwire.core.Constants
 
 class LoginController {
 
-    static allowedMethods = [submituser: 'POST', index: 'GET']
+    static allowedMethods = [submituser: 'POST', submitresponse: 'POST', index: 'GET']
 
     private final Random random = new SecureRandom()
 
@@ -27,9 +27,8 @@ class LoginController {
             return
         }
         if (user.hasErrors()) {
-            user.errors.allErrors.each {
-                println it
-            }
+            flash.error = "Invalid MuWire ID"
+            redirect action: 'index'
             return
         }
 
@@ -58,18 +57,27 @@ class LoginController {
         byte[] challenge = session['challenge']
         
         if (p == null || challenge == null) {
-            // TODO: redirect to index
+            flash.error = "Session expired"
+            redirect action : "index"
+            return
         }
 
+        boolean ok = false
         byte[]respBytes = Base64.decode(response)
-                
-        def sig = new Signature(Constants.SIG_TYPE, respBytes)
-        def spk = p.getDestination().getSigningPublicKey()
-        boolean ok = DSAEngine.getInstance().verifySignature(sig, challenge, spk)
+       
+        if (respBytes != null) {
+            try {
+                def sig = new Signature(Constants.SIG_TYPE, respBytes)
+                def spk = p.getDestination().getSigningPublicKey()
+                ok = DSAEngine.getInstance().verifySignature(sig, challenge, spk)
+            } catch (Exception e) {
+                e.printStackTrace()
+            }
+        }
 
         if(!ok) {
-            println "did not verify"
-            // TODO: redirect to index
+            flash.error = "Invalid response to challenge"
+            redirect action : "index"
         } else {
             def model = [:]
             model['shortID'] = p.getHumanReadableName()
