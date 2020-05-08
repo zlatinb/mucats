@@ -1,5 +1,11 @@
-import com.muwire.mucats.security.UserPasswordEncoderListener
+import com.muwire.mucats.security.*
+import org.springframework.security.authentication.*
+
 // Place your Spring DSL code here
 beans = {
-    userPasswordEncoderListener(UserPasswordEncoderListener)
+ 
+    authenticationProcessingFilter(ChallengeResponseAuthenticationFilter) {
+        authenticationManager = ref('authenticationManager')
+    }
+    challengeResponseAuthenticationProvider(ChallengeResponseAuthenticationProvider)
 }

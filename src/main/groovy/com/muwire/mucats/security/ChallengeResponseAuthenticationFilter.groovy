@@ -26,17 +26,16 @@ class ChallengeResponseAuthenticationFilter extends AbstractAuthenticationProces
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
     throws AuthenticationException, IOException, ServletException {
 
-        // if we don't have a session, we must have a "personaB64" header
-        HttpSession session = request.getSession(false)
-        if (session == null) {
-            String personaB64 = request.getParameter("personaB64")
+        HttpSession session = request.getSession()
+        
+        String personaB64 = request.getParameter("personaB64")
+        if (personaB64 != null) {
             Persona persona
             try {
                 persona = new Persona(new ByteArrayInputStream(Base64.decode(personaB64)))
             } catch (Exception badPersona) {
                 throw new AuthenticationException("invalid persona", badPersona) {}
             }
-            session = request.getSession(true)
             session.setAttribute("persona", persona)
             response.sendRedirect("/login/challenge")
             return null

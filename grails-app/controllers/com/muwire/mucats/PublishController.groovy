@@ -4,5 +4,11 @@ import grails.plugin.springsecurity.annotation.Secured
 
 class PublishController {
 
-    def index() { }
+    @Secured(["ROLE_USER"])
+    def index() { 
+        def model = [:]
+        model['shortID'] = session['persona'].getHumanReadableName()
+        model['roles'] = "TODO"
+        model
+    }
 }

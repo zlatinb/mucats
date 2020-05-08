@@ -1,6 +1,15 @@
 
 
+// mask the default spring login controller
+grails.plugin.springsecurity.auth.loginFormUrl="/login"
+
+grails.plugin.springsecurity.providerNames = [
+        'challengeResponseAuthenticationProvider',
+        'anonymousAuthenticationProvider',
+        'rememberMeAuthenticationProvider']
+
 // Added by the Spring Security Core plugin:
+
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.muwire.mucats.security.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.muwire.mucats.security.UserRole'
 grails.plugin.springsecurity.authority.className = 'com.muwire.mucats.security.Role'
@@ -14,7 +23,8 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/**/js/**',       access: ['permitAll']],
 	[pattern: '/**/css/**',      access: ['permitAll']],
 	[pattern: '/**/images/**',   access: ['permitAll']],
-	[pattern: '/**/favicon.ico', access: ['permitAll']]
+	[pattern: '/**/favicon.ico', access: ['permitAll']],
+    [pattern: '/login/auth',     access: ['denyAll']]
 ]
 
 grails.plugin.springsecurity.filterChain.chainMap = [

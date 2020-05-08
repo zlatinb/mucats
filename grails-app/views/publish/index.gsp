@@ -4,6 +4,7 @@
         <meta name="layout" content="main" />
     </head>
     <body>
-        Publish page goes here !
+    	<p>You are logged in as ${shortID} with roles ${roles}</p>
+        <p>Publish page goes here !</p>
     </body>
 </html>

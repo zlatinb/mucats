@@ -15,31 +15,21 @@ import com.muwire.core.Constants
 
 class LoginController {
 
-    static allowedMethods = [submituser: 'POST', submitresponse: 'POST', index: 'GET']
+    static allowedMethods = [challenge: 'GET', submitresponse: 'POST', index: 'GET']
 
     private final Random random = new SecureRandom()
 
     def index() {
     }
 
-    def submituser(FullID user) {
-        if (user == null) {
-            render status: HttpStatus.NOT_FOUND
-            return
-        }
-        if (user.hasErrors()) {
-            flash.error = "Invalid MuWire ID"
-            redirect action: 'index'
-            return
-        }
+    def challenge() {
 
         byte[]challenge = new byte[64]
         random.nextBytes(challenge)
         String challengeString = Base64.encode(challenge)
 
-        Persona persona = FullID.getPersona(user)
+        Persona persona = session['persona']
         session['challenge'] = challengeString.getBytes(StandardCharsets.UTF_8)
-        session['persona'] = persona
 
         def model = [:]
         model['challenge'] = challengeString
