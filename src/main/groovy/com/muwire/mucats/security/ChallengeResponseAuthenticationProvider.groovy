@@ -1,6 +1,7 @@
 package com.muwire.mucats.security
 
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
 
@@ -10,7 +11,7 @@ import net.i2p.crypto.DSAEngine
 import net.i2p.data.Base64
 import net.i2p.data.Signature
 
-class ChallengeResponseAuthenticationManager implements AuthenticationManager {
+class ChallengeResponseAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -28,6 +29,11 @@ class ChallengeResponseAuthenticationManager implements AuthenticationManager {
             return cra
         }else
             throw new AuthenticationException("invalid response") {}
+    }
+
+    @Override
+    public boolean supports(Class<?> authentication) {
+        authentication == ChallengeResponseAuthentication.class
     }
 
 }
