@@ -11,15 +11,23 @@ import java.security.SecureRandom
 import java.nio.charset.StandardCharsets
 
 import com.muwire.core.Persona
+
+import grails.plugin.springsecurity.SpringSecurityUtils
+
 import com.muwire.core.Constants
 
 class LoginController {
 
     static allowedMethods = [challenge: 'GET', submitresponse: 'POST', index: 'GET']
+    
+    def springSecurityService
 
     private final Random random = new SecureRandom()
 
     def index() {
+        if (springSecurityService.isLoggedIn()) {
+            redirect uri: conf.successHandler.defaultTargetUrl
+        }
     }
 
     def challenge() {
@@ -39,40 +47,9 @@ class LoginController {
     }
 
     def submitresponse(String response) {
-        if (response == null) {
-            render status : HttpStatus.NOT_FOUND
-            return
-        }
-
-        Persona p = session['persona']
-        byte[] challenge = session['challenge']
-        
-        if (p == null || challenge == null) {
-            flash.error = "Session expired"
-            redirect action : "index"
-            return
-        }
-
-        boolean ok = false
-        byte[]respBytes = Base64.decode(response)
-       
-        if (respBytes != null) {
-            try {
-                def sig = new Signature(Constants.SIG_TYPE, respBytes)
-                def spk = p.getDestination().getSigningPublicKey()
-                ok = DSAEngine.getInstance().verifySignature(sig, challenge, spk)
-            } catch (Exception e) {
-                e.printStackTrace()
-            }
-        }
-
-        if(!ok) {
-            flash.error = "Invalid response to challenge"
-            redirect action : "index"
-        } else {
-            def model = [:]
-            model['shortID'] = DataHelper.escapeHTML(p.getHumanReadableName())
-            render(view : "welcome", model : model)
-        }
+    }
+    
+    protected ConfigObject getConf() {
+        SpringSecurityUtils.securityConfig
     }
 }
