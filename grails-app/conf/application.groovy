@@ -2,6 +2,8 @@
 
 // mask the default spring login controller
 grails.plugin.springsecurity.auth.loginFormUrl="/login"
+grails.plugin.springsecurity.logout.postOnly=false
+
 
 grails.plugin.springsecurity.providerNames = [
         'challengeResponseAuthenticationProvider',
