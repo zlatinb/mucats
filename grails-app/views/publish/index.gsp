@@ -4,7 +4,7 @@
         <meta name="layout" content="main" />
     </head>
     <body>
-    	<p>You are logged in as ${shortID} with roles ${roles}</p>
+    	<p>You are logged in as <sec:username/></p>
         <p>Publish page goes here !</p>
     </body>
 </html>
