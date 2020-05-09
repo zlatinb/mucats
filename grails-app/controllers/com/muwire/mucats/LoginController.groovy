@@ -8,6 +8,7 @@ import net.i2p.data.Signature
 import net.i2p.data.DataHelper
 
 import java.security.SecureRandom
+import java.net.Authenticator.RequestorType
 import java.nio.charset.StandardCharsets
 
 import com.muwire.core.Persona
@@ -28,6 +29,10 @@ class LoginController {
         if (springSecurityService.isLoggedIn()) {
             redirect uri: conf.successHandler.defaultTargetUrl
         }
+        if (request.getParameter("error") != null) {
+            flash.error="Invalid login"
+        } 
+        render view : "index"
     }
 
     def challenge() {

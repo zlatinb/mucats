@@ -20,8 +20,12 @@ class ChallengeResponseAuthenticationProvider implements AuthenticationProvider 
         byte [] response = Base64.decode(cra.getResponse())
         if (response == null)
             throw new AuthenticationException("base64 couldn't decode response") {}
-        
-        def sig = new Signature(Constants.SIG_TYPE, response)
+        def sig
+        try {
+            sig = new Signature(Constants.SIG_TYPE, response)
+        } catch (Exception invalidSig) {
+            throw new AuthenticationException("invalid signature", sig) {}
+        }
         def spk = cra.getPersona().getDestination().getSigningPublicKey()
         if (DSAEngine.getInstance().verifySignature(sig, cra.getChallenge(), spk)) {
             authentication.setAuthenticated(true)
