@@ -10,6 +10,7 @@
     		<sec:access expression="hasRole('ROLE_USER')"><li>User</li></sec:access>
     		<sec:access expression="hasRole('ROLE_MODERATOR')"><li>Moderator</li></sec:access>
     		<sec:access expression="hasRole('ROLE_ADMIN')"><li>Admin</li></sec:access>
+    	</ul>
         <p>Publish page goes here !</p>
     </body>
 </html>
