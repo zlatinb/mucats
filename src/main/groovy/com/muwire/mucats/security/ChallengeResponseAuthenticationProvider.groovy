@@ -29,7 +29,6 @@ class ChallengeResponseAuthenticationProvider implements AuthenticationProvider 
         def spk = cra.getPersona().getDestination().getSigningPublicKey()
         if (DSAEngine.getInstance().verifySignature(sig, cra.getChallenge(), spk)) {
             authentication.setAuthenticated(true)
-            cra.setRoles("ROLE_USER") // TODO: check with db and stuff
             return cra
         }else
             throw new AuthenticationException("invalid response") {}

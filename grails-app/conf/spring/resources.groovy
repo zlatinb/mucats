@@ -7,7 +7,13 @@ import grails.plugin.springsecurity.web.authentication.rememberme.*
 // Place your Spring DSL code here
 beans = {
 
-    successHandler(UserCreatingAuthenticationSuccessHandler)
+    userCreator(UserCreatorService) {
+        grailsApplication = ref('grailsApplication')
+    }
+    
+    successHandler(UserCreatingAuthenticationSuccessHandler) {
+        userCreator = ref('userCreator')
+    }
 
     failureHandler(SimpleUrlAuthenticationFailureHandler) {
         defaultFailureUrl = "/login?error=true"

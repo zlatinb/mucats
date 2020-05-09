@@ -1,5 +1,7 @@
 
 
+
+
 // mask the default spring login controller
 grails.plugin.springsecurity.auth.loginFormUrl="/login"
 grails.plugin.springsecurity.logout.postOnly=false
@@ -40,6 +42,7 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 
 grails.plugin.springsecurity.rememberMe.cookieName = "mucats_remember_me"
 grails.plugin.springsecurity.rememberMe.key = "mucats_key"
+grails.plugin.springsecurity.adminUser = "zlatinb@3k2gijdfdcuczkfypfddj4qsnnf744mj"
 grails.plugin.springsecurity.rememberMe.persistent = true
 grails.plugin.springsecurity.rememberMe.persistentToken.domainClassName = 'com.muwire.mucats.security.PersistentLogin'
 
