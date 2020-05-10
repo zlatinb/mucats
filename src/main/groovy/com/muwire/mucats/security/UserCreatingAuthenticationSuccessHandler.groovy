@@ -19,7 +19,8 @@ class UserCreatingAuthenticationSuccessHandler extends SavedRequestAwareAuthenti
 
         ChallengeResponseAuthentication cra = authentication
         String userName = cra.getPersona().getHumanReadableName()
-        String [] roles = userCreator.getOrCreate(userName)
+        String personaB64 = cra.getPersona().toBase64()
+        String [] roles = userCreator.getOrCreate(userName, personaB64)
         cra.setRoles(roles)
         super.onAuthenticationSuccess(request, response, authentication)
     }

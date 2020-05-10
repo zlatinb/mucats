@@ -12,6 +12,7 @@ class User implements Serializable {
     private static final long serialVersionUID = 1
 
     String username
+    String personaB64
     boolean enabled = true
     boolean accountLocked
 
@@ -21,5 +22,6 @@ class User implements Serializable {
 
     static constraints = {
         username nullable: false, blank: false, unique: true
+        personaB64 nullable: false, blank: false, unique: true, size: 512..1024
     }
 }

@@ -18,11 +18,11 @@ class UserCreatorService {
      * @param userName to get or create
      * @return the roles for that user name
      */
-    public synchronized String[] getOrCreate(String userName) {
+    public synchronized String[] getOrCreate(String userName, String personaB64) {
         User user = User.where {username == userName}.get()
         if (user == null) {
             Role role = getRoleService().findByAuthority("ROLE_USER")
-            user = new User(username : userName)
+            user = new User(username : userName, personaB64 : personaB64)
             user.save()
             getUserRoleService().save(user, role)
             return ["ROLE_USER"]

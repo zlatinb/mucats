@@ -31,9 +31,10 @@ class BootStrap {
         
         ConfigObject obj = SpringSecurityUtils.securityConfig
         String adminUserName = obj.getProperty('adminUser')
+        String adminUserB64 = obj.getProperty('adminB64')
         User adminUser = userService.findByUsername(adminUserName)
         if (adminUser == null) {
-            adminUser = new User(username : adminUserName)
+            adminUser = new User(username : adminUserName, personaB64 : adminUserB64)
             userService.save(adminUser)
             authorities.each { 
                 Role role = roleService.findByAuthority(it)
