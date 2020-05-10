@@ -35,6 +35,7 @@ This is the absolute minimum set of features necessary for someone to be willing
 * Moderators can delete individual comments or entire publications
 * Administrator (single per site) can appoint users as moderators
 * Administrator can ban users
+* Blacklist publications by file type and keywords
 * RSS feed for latest publications
 
 ### Features for later
