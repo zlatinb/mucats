@@ -15,6 +15,7 @@ class ChallengeResponseAuthentication implements Authentication {
     
     private final List<SimpleGrantedAuthority> authorities = new ArrayList<>()
     private volatile boolean authenticated
+    private volatile MuCatsUser principal
     
     public ChallengeResponseAuthentication(Persona persona, byte[] challenge, String response) {
         this.persona = persona
@@ -44,7 +45,11 @@ class ChallengeResponseAuthentication implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return this;
+        principal
+    }
+    
+    public void setPrincipal(MuCatsUser principal) {
+        this.principal = principal
     }
 
     @Override

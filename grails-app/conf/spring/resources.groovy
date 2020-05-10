@@ -13,6 +13,7 @@ beans = {
     
     successHandler(UserCreatingAuthenticationSuccessHandler) {
         userCreator = ref('userCreator')
+        userDetailsService = ref('userDetailsService')
     }
 
     failureHandler(SimpleUrlAuthenticationFailureHandler) {
