@@ -15,6 +15,8 @@ class User implements Serializable {
     String personaB64
     boolean enabled = true
     boolean accountLocked
+    boolean showFullId = true
+    String profile
 
     Set<Role> getAuthorities() {
         (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
@@ -23,5 +25,6 @@ class User implements Serializable {
     static constraints = {
         username nullable: false, blank: false, unique: true
         personaB64 nullable: false, blank: false, unique: true, size: 512..1024
+        profile nullable: true, blank : true, size: 0..32000
     }
 }

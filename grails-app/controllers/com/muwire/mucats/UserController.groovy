@@ -6,6 +6,7 @@ import com.muwire.mucats.security.User
 
 import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.annotation.Secured
+import net.i2p.data.DataHelper
 
 class UserController {
     
@@ -35,7 +36,17 @@ class UserController {
             return 
         }
         
-        render (view : "show", model : [user : user, home : home, admin : admin])
+        def model = [:]
+        model['user'] = user
+        model['home'] = home
+        model['admin'] = admin
+        model['canEdit'] = home || admin
+        if (!user.profile || user.profile.length() == 0) {
+            model['profile'] = message(code : "default.no.profile")
+        } else {
+            model['profile'] = DataHelper.escapeHTML(user.profile)
+        }
+        render (view : "show", model : model)
     }
     
     @Secured("isAuthenticated()")
