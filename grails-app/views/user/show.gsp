@@ -22,7 +22,7 @@
             </g:else>
             <hr/>
             <p>Public profile:</p>
-            <textarea readonly>${profile}</textarea>
+            <pre>${profile}</pre>
         </g:else>
     </body>
 </html>
