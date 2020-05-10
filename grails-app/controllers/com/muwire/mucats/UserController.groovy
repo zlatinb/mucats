@@ -1,5 +1,7 @@
 package com.muwire.mucats
 
+import java.net.http.HttpRequest
+
 import com.muwire.mucats.security.User
 
 import grails.plugin.springsecurity.SpringSecurityUtils
@@ -34,5 +36,26 @@ class UserController {
         }
         
         render (view : "show", model : [user : user, home : home, admin : admin])
+    }
+    
+    @Secured("isAuthenticated()")
+    def edit(Long id) {
+        
+        boolean canEdit = springSecurityService.loadCurrentUser().id == id
+        canEdit |= SpringSecurityUtils.ifAllGranted("ROLE_ADMIN")
+        
+        if (!canEdit) {
+            def error = message(code : "default.cannot.edit.message")
+            render (view : "edit", model : [error : error])
+            return
+        }
+        
+        def user = User.get(id)
+        if (!user) {
+            def error = message(code : 'default.not.found.message', args: [message(code: 'person.label', default : 'Person'), id])
+            render( view : "edit", model : [error : error])
+            return 
+        }
+        render(view : "edit", model : [user : user])
     }
 }
