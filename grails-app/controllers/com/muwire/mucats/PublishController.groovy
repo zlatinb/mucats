@@ -6,7 +6,7 @@ import grails.plugin.springsecurity.annotation.Secured
 
 class PublishController {
     
-    static allowedMethods = [save : "POST"]
+    static allowedMethods = [save : "POST", comment : "POST"]
     
     def springSecurityService
 
@@ -43,16 +43,42 @@ class PublishController {
     def save(String hash, String name, String description) {
         User me = springSecurityService.getCurrentUser()
         Publication publication = new Publication(hash : hash, name : name, description : description, user : me)
-        println "created publication"
         publication.validate()
         if (publication.hasErrors()) {
-            println "publication has errors"
             flash.error = "Invalid submission"
             render(view : "create", model : [publication : publication])
             return
         }
         publication.save()
-        println "saved publication"
         redirect(action : "show", id : publication.id)
+    }
+    
+    @Secured("isAuthenticated()")
+    def comment(Long pubId, String commentText) {
+        println "adding comment..."
+        User me = springSecurityService.getCurrentUser()
+        Publication publication = Publication.get(pubId)
+        if (!publication) {
+            println "no publication?"
+            flash.error("No such publication")
+            redirect(url : "/")
+            return
+        }
+        println "creating comment"
+        Comment comment = new Comment(comment : commentText, user : me, publication : publication)
+        comment.validate()
+        if (comment.hasErrors()) {
+            println "comment has errors"
+            flash.error = "Failed to add comment"
+            render (view : "show", model : [publication : publication])
+            return
+        }
+        println "about to add to parents"
+        publication.addToComments(comment)
+        me.addToComments(comment)
+        println "saving publication " + publication.save()
+        println "saving user " + me.save()
+        println "saving comment " + comment.save()
+        redirect(action : "show", id : pubId)
     }
 }

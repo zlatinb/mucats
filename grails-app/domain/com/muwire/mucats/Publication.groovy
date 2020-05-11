@@ -29,4 +29,8 @@ class Publication {
     static belongsTo = [user : User]
     
     static hasMany = [comments : Comment]
+    
+    static mapping = {
+        comments lazy: false
+    }
 }
