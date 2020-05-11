@@ -34,12 +34,12 @@ class PublishController {
         [publication : publication]
     }
     
-    @Secured("isAuthenticated()")
+    @Secured("isAuthenticated() && principal.isAccountNonLocked()")
     def create() {
         [publication : new Publication(params)]
     }
     
-    @Secured("isAuthenticated()")
+    @Secured("isAuthenticated() && principal.isAccountNonLocked()")
     def save(String hash, String name, String description) {
         User me = springSecurityService.getCurrentUser()
         Publication publication = new Publication(hash : hash, name : name, description : description, user : me)
@@ -53,7 +53,7 @@ class PublishController {
         redirect(action : "show", id : publication.id)
     }
     
-    @Secured("isAuthenticated()")
+    @Secured("isAuthenticated() && principal.isAccountNonLocked()")
     def comment(Long pubId, String commentText) {
         User me = springSecurityService.getCurrentUser()
         Publication publication = Publication.get(pubId)

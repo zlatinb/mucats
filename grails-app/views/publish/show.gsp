@@ -1,4 +1,4 @@
-<html>
+	<html>
     <head>
         <title>Publication</title>
         <meta name="layout" content="main" />
@@ -23,11 +23,13 @@
                 </g:each>
             <hr/>
             <sec:ifLoggedIn>
-                <g:form action="comment">
-                    <g:hiddenField name="pubId" value="${publication.id}"/>
-                    <g:textArea name="commentText"/>
-                    <g:submitButton name="Comment"/>
-                </g:form>
+            	<sec:access expression="principal.isAccountNonLocked()">
+    	            <g:form action="comment">
+        	            <g:hiddenField name="pubId" value="${publication.id}"/>
+            	        <g:textArea name="commentText"/>
+                	    <g:submitButton name="Comment"/>
+                	</g:form>
+                </sec:access>
             </sec:ifLoggedIn>
         </g:else>
     </body>
