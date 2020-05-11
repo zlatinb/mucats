@@ -16,6 +16,13 @@
                 <g:textArea name="profile">${user.profile}</g:textArea>
                 <g:actionSubmit value="Save" action="update"/>
             </g:form>
+            <hr/>
+            <h3>Delete user</h3>
+            <g:form>
+                <g:hiddenField name="id" value="${user.id}" />
+                <input type="checkbox" name="sure"/> Are you sure<br/>
+                <g:actionSubmit value="Delete" action="delete"/>
+            </g:form>
         </g:else>
     </body>
 </html>

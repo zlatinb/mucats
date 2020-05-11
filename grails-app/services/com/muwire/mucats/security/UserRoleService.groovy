@@ -8,4 +8,5 @@ import grails.gorm.services.Service;
 public interface UserRoleService {
     UserRole save(User user, Role role);
     List<UserRole> findUserRoles(User user);
+    void delete(User user)
 }
