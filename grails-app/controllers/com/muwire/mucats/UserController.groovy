@@ -154,10 +154,33 @@ class UserController {
                 redirect (action : "index")
             }
         } catch (DataIntegrityViolationException e) {
-            e.printStackTrace()
             def error = message(code: 'default.not.deleted.message', args: [message(code: 'person.label', default: 'Person'), id])
             render( view : "edit", model : [error : error])
             return
         }
+    }
+    
+    @Secured("hasRole('ROLE_ADMIN')")
+    def lock(Long id, boolean toLock) {
+        if (springSecurityService.loadCurrentUser().id == id) {
+            def error = message(code : "default.cannot.lock.admin")
+            render (view : "edit", model : [error : error])
+            return
+        }
+        
+        def user = User.get(id)
+        if (!user) {
+            def error = message(code : 'default.not.found.message', args: [message(code: 'person.label', default : 'Person'), id])
+            render( view : "edit", model : [error : error])
+            return
+        }
+        
+        user.accountLocked = toLock
+        if (!userService.save(user)) {
+            render(view : "edit", model : [user : user])
+            return
+        }
+        // TODO: some nice looking message
+        redirect(action: 'show', id : user.id)
     }
 }

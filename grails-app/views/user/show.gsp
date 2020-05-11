@@ -9,6 +9,9 @@
         </g:if>
         <g:else>
             <h3>${user.username}</h3>
+            <g:if test="${user.accountLocked}">
+                <p>Account Locked!</p>
+            </g:if>
             <g:if test="${canEdit}">
                 <g:link action="edit" id="${user.id}">Edit Profile</g:link>
             </g:if>

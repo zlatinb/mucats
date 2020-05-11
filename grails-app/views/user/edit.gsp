@@ -23,6 +23,23 @@
                 <input type="checkbox" name="sure"/> Are you sure<br/>
                 <g:actionSubmit value="Delete" action="delete"/>
             </g:form>
+            <sec:access expression="hasRole('ROLE_ADMIN')">
+                <h3>Admin</h3>
+                <g:if test="${user.accountLocked}">
+                    <g:form>
+                        <g:hiddenField name="id" value="${user.id}" />
+                        <g:hiddenField name="toLock" value="false" />
+                        <g:actionSubmit value="Unlock" action="lock" />
+                    </g:form>
+                </g:if>
+                <g:else>
+                    <g:form>
+                        <g:hiddenField name="id" value="${user.id}" />
+                        <g:hiddenField name="toLock" value="true" />
+                        <g:actionSubmit value="Lock" action="lock" />
+                    </g:form>
+                </g:else>
+            </sec:access>
         </g:else>
     </body>
 </html>
