@@ -8,6 +8,9 @@
             <div class='errors'>${error}</div>
         </g:if>
         <g:else>
+            <sec:access expression="hasRole('ROLE_ADMIN')">
+                <g:link action="list">User List</g:link>
+            </sec:access>
             <h3>${user.username}</h3>
             <g:if test="${user.accountLocked}">
                 <p>Account Locked!</p>

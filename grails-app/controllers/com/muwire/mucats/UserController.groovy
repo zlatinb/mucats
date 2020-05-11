@@ -183,4 +183,9 @@ class UserController {
         // TODO: some nice looking message
         redirect(action: 'show', id : user.id)
     }
+    
+    @Secured("hasRole('ROLE_ADMIN')")
+    def list() {
+        [users : User.list()]
+    }
 }
