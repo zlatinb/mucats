@@ -4,6 +4,7 @@
         <meta name="layout" content="main" />
     </head>
     <body>
+        <g:render template="navbar"/>
     	<p>You are logged in as <sec:username/></p>
     	<p>You have the following roles:</p>
     	<ul>

@@ -4,7 +4,7 @@
         <meta name="layout" content="main" />
     </head>
     <body>
-        
+        <g:render contextPath="/" template="navbar"/>        
         <g:if test="${flash.error}">
             <div class="errors">${flash.error}</div>
         </g:if>

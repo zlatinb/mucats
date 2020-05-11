@@ -4,6 +4,7 @@
         <meta name="layout" content="main" />
     </head>
     <body>
+        <g:render contextPath="/" template="navbar"/>
         Prove that you are <span class="short-id">${shortID}</span><br/>
         Sign the following challenge:<br>
         <div id="challenge">${challenge}</div>
