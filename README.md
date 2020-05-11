@@ -2,7 +2,7 @@
 
 Website for hosting hashes of cat videos and other files shared on the MuWire network
 
-### Running
+### Quick Start
 
 1. Check out muwire and execute `./gradlew clean publish` in that project.  You only need to do this step once.
 2. Execute
@@ -11,6 +11,20 @@ Website for hosting hashes of cat videos and other files shared on the MuWire ne
 ```
 Then go to `http://localhost:8080`
 
+### Production Deployments
+
+0. Edit `grails-app/conf/application.groovy` to customize the deployment.  You should at least change the administrator name and full MuWire ID.
+1. Execute
+```
+./gradlew clean assemble
+```
+2. Look in `build/libs` there should be a file `mucats-x.y.war`.  Copy that to a folder somewhere.
+3. Copy `grails-app/conf/application.yml` to the same folder
+4. Edit the `application.yml` file and change `environments -> production -> dataSource -> dbCreate` to `update`
+
+You're ready to start your production deployment of MuCats!  Type `java -jar mucats-x.y.war`.
+
+You can configure many things from `application.yml` like different database backend and so on.  Look around the internet for guides how to do that.
 
 ### Authentication
 
