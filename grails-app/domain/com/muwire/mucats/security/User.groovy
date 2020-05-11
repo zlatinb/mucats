@@ -2,6 +2,10 @@ package com.muwire.mucats.security
 
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
+
+import com.muwire.mucats.Comment
+import com.muwire.mucats.Publication
+
 import grails.compiler.GrailsCompileStatic
 
 @GrailsCompileStatic
@@ -27,4 +31,6 @@ class User implements Serializable {
         personaB64 nullable: false, blank: false, unique: true, size: 512..1024
         profile nullable: true, blank : true, size: 0..32000
     }
+    
+    static hasMany = [publications : Publication, comments : Comment]
 }

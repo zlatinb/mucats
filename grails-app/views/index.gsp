@@ -26,6 +26,14 @@
             </ul>
         </div>
     </section>
+    <g:if test="${flash.error}">
+    	<div class="errors">${flash.error}</div>
+   	</g:if>
+        <div>
+        	<p>Recent Publications</p>
+        	<g:include controller="publish" action="list"/>
+        </div>
+        
 </div>
 
 </body>
