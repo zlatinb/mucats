@@ -1,7 +1,5 @@
 package com.muwire.mucats
 
-import java.net.http.HttpRequest
-
 import org.springframework.dao.DataIntegrityViolationException
 
 import com.muwire.mucats.security.User
