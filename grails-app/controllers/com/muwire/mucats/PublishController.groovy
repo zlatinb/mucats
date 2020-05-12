@@ -1,14 +1,21 @@
 package com.muwire.mucats
 
+import org.springframework.dao.DataIntegrityViolationException
+
+import com.muwire.mucats.security.Role
+import com.muwire.mucats.security.RoleService
 import com.muwire.mucats.security.User
+import com.muwire.mucats.security.UserRoleService
 
 import grails.plugin.springsecurity.annotation.Secured
 
 class PublishController {
     
-    static allowedMethods = [save : "POST", comment : "POST"]
+    static allowedMethods = [save : "POST", comment : "POST", delete : "POST"]
     
     def springSecurityService
+    RoleService roleService
+    PublicationService publicationService
 
     @Secured("permitAll")
     def list() {
@@ -35,7 +42,17 @@ class PublishController {
             return
         }
         
-        [publication : publication]
+        boolean canDelete = false
+        if (springSecurityService.isLoggedIn()) {
+            User me = springSecurityService.getCurrentUser()
+            if (!me.isAccountLocked()) {
+                Role moderator = roleService.findByAuthority("ROLE_MODERATOR")
+                canDelete |= me.getAuthorities().contains(moderator)
+                canDelete |= publication.user.id == me.id  
+            }
+        }
+        
+        [publication : publication, canDelete : canDelete]
     }
     
     @Secured("isAuthenticated() && principal.isAccountNonLocked()")
@@ -79,5 +96,33 @@ class PublishController {
         me.save()
         comment.save()
         redirect(action : "show", id : pubId)
+    }
+    
+    @Secured("isAuthenticated() && principal.isAccountNonLocked()")
+    def delete(Long pubId) {
+        Publication publication = Publication.get(pubId)
+        if (!publication) {
+            flash.error("No such publication")
+            redirect(url : "/")
+            return
+        }
+        User me = springSecurityService.getCurrentUser()
+        Role moderator = roleService.findByAuthority("ROLE_MODERATOR")
+        boolean canDelete = me.getAuthorities().contains(moderator)
+        canDelete |= publication.user.id == me.id
+        
+        if (!canDelete) {
+            flash.error("You can't delete this publication")
+            redirect(url : "/")
+            return
+        }
+        try {
+            publicationService.delete(pubId)
+            redirect(action : "list")
+        } catch (DataIntegrityViolationException e) {
+            flash.message = "Could not delete publication"
+            redirect(action : "show", id : pubId)
+        }
+        
     }
 }

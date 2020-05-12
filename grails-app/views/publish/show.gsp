@@ -5,8 +5,8 @@
     </head>
     <body>
         <g:render contextPath="/" template="navbar"/>
-        <g:if test="${error}">
-            <div class='errors'>${error}</div>
+        <g:if test="${flash.message}">
+            <div class='errors'>${flash.message}</div>
         </g:if>
         <g:else>
             <h3>${publication.name}</h3>
@@ -29,6 +29,13 @@
             	        <g:textArea name="commentText"/>
                 	    <g:submitButton name="Comment"/>
                 	</g:form>
+                	<hr/>
+                	<g:if test="${canDelete}">
+                		<g:form action="delete">
+                			<g:hiddenField name="pubId" value="${publication.id}"/>
+                			<g:submitButton name="Delete Publication"/>
+                		</g:form>
+                	</g:if>
                 </sec:access>
             </sec:ifLoggedIn>
         </g:else>
