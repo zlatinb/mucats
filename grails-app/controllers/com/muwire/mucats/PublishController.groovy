@@ -12,12 +12,16 @@ class PublishController {
 
     @Secured("permitAll")
     def list() {
-        int offset = params['offset'] ?: 0
-        int max = params['max'] ?: 20
-        String sort = params['sort'] ?: "date"
-        String order = params['order'] ?: "asc"
-        
-        def publications = Publication.list(offset : offset, max : max, sort : sort, order : order)
+        if (!params['offset'])
+            params['offset'] = 0
+        if (!params['max'])
+            params['max'] = 20
+        if (!params['sort'])
+            params['sort'] = "date"
+        if (!params['order'])
+            params['order'] = "desc"
+                
+        def publications = Publication.list(params)
         
         [publications : publications, total : Publication.count()]
     }

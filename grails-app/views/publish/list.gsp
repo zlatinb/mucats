@@ -1,3 +1,13 @@
+	<!doctype html>
+	<html>
+	<head>
+	    <meta name="layout" content="main"/>
+	    <title>Welcome to MuCats</title>
+	</head>
+	<body>
+	
+	<g:render contextPath="/" template="navbar"/>
+
 <g:if test="${total > 0}">
 <p>Total Publications ${total}</p>
     <table>
@@ -27,3 +37,6 @@
 <g:else>
 <p>No publications in the database!</p>
 </g:else>
+
+</body>
+</html>
