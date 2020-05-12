@@ -2,6 +2,8 @@ package com.muwire.mucats
 
 import org.springframework.dao.DataIntegrityViolationException
 
+import com.muwire.mucats.security.Role
+import com.muwire.mucats.security.RoleService
 import com.muwire.mucats.security.User
 import com.muwire.mucats.security.UserRoleService
 import com.muwire.mucats.security.UserService
@@ -17,6 +19,7 @@ class UserController {
     def springSecurityService
     UserService userService
     UserRoleService userRoleService
+    RoleService roleService
 
     @Secured("isAuthenticated()")
     def index() {
@@ -57,7 +60,7 @@ class UserController {
     
     @Secured("isAuthenticated()")
     def edit(Long id) {
-        
+       
         boolean canEdit = springSecurityService.loadCurrentUser().id == id
         canEdit |= SpringSecurityUtils.ifAllGranted("ROLE_ADMIN")
         
@@ -73,13 +76,18 @@ class UserController {
             render( view : "edit", model : [error : error])
             return 
         }
-        render(view : "edit", model : [user : user])
+        
+        Role moderatorRole = roleService.findByAuthority("ROLE_MODERATOR")
+        boolean moderator = user.getAuthorities().contains(moderatorRole)
+        
+        render(view : "edit", model : [user : user, moderator : moderator])
     }
     
     @Secured("isAuthenticated()")
-    def update(Long id, Long version, boolean showFullId, String profile) {
+    def update(Long id, Long version, boolean showFullId, String profile, Boolean moderator) {
+        boolean byAdmin = SpringSecurityUtils.ifAllGranted("ROLE_ADMIN") 
         boolean canEdit = springSecurityService.loadCurrentUser().id == id
-        canEdit |= SpringSecurityUtils.ifAllGranted("ROLE_ADMIN")
+        canEdit |= byAdmin
         
         if (!canEdit) {
             def error = message(code : "default.cannot.edit.message")
@@ -87,7 +95,7 @@ class UserController {
             return
         }
         
-        def user = User.get(id)
+        User user = User.get(id)
         if (!user) {
             def error = message(code : 'default.not.found.message', args: [message(code: 'person.label', default : 'Person'), id])
             render( view : "edit", model : [error : error])
@@ -104,6 +112,19 @@ class UserController {
         
         user.showFullId = showFullId
         user.profile = profile
+        
+        if (byAdmin) {
+            Role moderatorRole = roleService.findByAuthority("ROLE_MODERATOR")
+            boolean isModerator = user.getAuthorities().contains(moderatorRole)
+            if (!isModerator && moderator) {
+                // promote
+                userRoleService.save(user, moderatorRole)
+            } else if (isModerator && !moderator) {
+                // demote
+                userRoleService.delete(user, moderatorRole)
+            }
+        }
+        
         if (!userService.save(user)) {
             render(view : "edit", model : [user : user])
             return

@@ -13,6 +13,11 @@
             <g:form>
                 <g:hiddenField name="id" value="${user.id}" />
                 <g:hiddenField name="version" value="${user.version}"/>
+                
+                <sec:access expression="hasRole('ROLE_ADMIN')">
+                	<input type="checkbox" name="moderator" <g:if test="${moderator}">checked</g:if> />Moderator<br/>
+                </sec:access>
+                
                 <input type="checkbox" name="showFullId" <g:if test="${user.showFullId}">checked</g:if> />Show Full ID<br/>
                 <g:textArea name="profile">${user.profile}</g:textArea>
                 <g:actionSubmit value="Save" action="update"/>
