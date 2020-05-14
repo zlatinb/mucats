@@ -8,7 +8,7 @@
         <center>
         Prove that you are <span class="short-id">${shortID}</span><br/>
         Sign the following challenge:<br>
-        <div id="challenge">${challenge}</div>
+        <div class="challenge">${challenge}</div>
         <g:form>
             <g:textField name="response"/><br/>
             <input type="checkbox" name="remember-me" <g:if test="${hasCookie}">checked</g:if> /> Remember me</br>

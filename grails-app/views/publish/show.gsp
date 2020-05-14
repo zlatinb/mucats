@@ -9,16 +9,23 @@
             <div class='errors'>${flash.message}</div>
         </g:if>
         <g:else>
-            <h3>${publication.name}</h3>
-            <p>Hash: ${publication.hash}</p>
-            <p>Description:</p>
-            <pre>${publication.description}</p>
-            <hr/>
+        	<div class="description">
+            	<h3>${publication.name}</h3>
+            	<div>
+            	<div class="mytooltip">Hash: <span class="hash">${publication.hash}</span><span class="mytooltiptext">Search for this hash with MuWire</span></div>
+            	</div>
+            	<g:if test="${publication.description}">
+	            	<pre class="description">${publication.description}</pre>
+	            </g:if>
+	            <g:else>
+	            	<div>No description provided</div>
+	            </g:else>
+            </div>
             <h3>Comments:</h3>
                 <g:each var="comment" in="${publication.comments}">
                     <div class="comment">
                         <g:link controller="user" action="show" id="${comment.user.id}">${comment.user.username}</g:link>  ${comment.date}<br/>
-                        <pre>${comment.comment}</pre>
+                        <pre class="comment">${comment.comment}</pre>
                     </div>
                 </g:each>
             <hr/>
