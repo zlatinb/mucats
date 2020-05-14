@@ -1,3 +1,5 @@
+The GitHub repo is a read-only mirror of the in-I2P repo at http://git.idk.i2p/zlatinb/mucats .  Please open issues or pull requests there.
+
 # MuCats
 
 Website for hosting hashes of cat videos and other files shared on the MuWire network
