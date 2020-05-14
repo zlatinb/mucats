@@ -656,3 +656,10 @@ div.comment {
 .mytooltip:hover .mytooltiptext {
   visibility: visible;
 }
+
+div.TermsOfService {
+	text-align:left;
+	background: yellow !important;
+	display: table;
+	border: 1px solid black;
+}

@@ -15,8 +15,10 @@
     This is an example deployment of the MuCats site code.  You can find the source code
     at <a href="http://git.idk.i2p/zlatinb/mucats">GitLab</a>.  <br/>
     The terms of service of this site are very simple:<br/> 
-    1. No NSFW content <br/>
-    2. No copyrighted content unless you own the copyright.<br/>  
+    <div class="TermsOfService">
+    1. No NSFW content<br/>
+    2. No copyrighted content unless you own the copyright.<br/>
+    </div>  
     Violation to these rules will result in your account getting locked.<br/><br/>
     Enjoy!
     
