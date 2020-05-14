@@ -17,10 +17,14 @@
             <g:actionSubmit value="submit" action="submituser" />
         </g:form>
         </center>
-        <h3>How to find your full MuWire ID:<h3>
-        <ul>
-        	<li>On the desktop client, look at the bottom left for a button called "Copy Full".  Click on that to copy your full ID to the clipboard</li>
-        	<li>On the plugin, go to the "About Me" page and click on "Copy To Clipboard"</li>
-        </ul>
+        <div class="message">
+	        <div><h3>How to find your full MuWire ID:</h3></div>
+	        <div>
+	        On the desktop client, look at the bottom left for a button called "Copy Full".  Click on that to copy your full ID to the clipboard
+	        </div>
+	        <div>
+	        On the plugin, go to the "About Me" page and click on "Copy To Clipboard"<br/>
+	        </div>
+        </div>
     </body>
 </html>

@@ -27,12 +27,14 @@
         </g:form>
         </center>
         
-        <h3>How to publish files</h3>
-        <p>The file you want to publish needs to be shared with MuWire.</p>
-        <p>With the desktop client, go to the "Uploads" tab, find the file you want to publish, then right-click on it and select "Copy hash to clipboard".
-        Paste the file hash in the "Hash" field above.</p>
-        <p>With the plugin, go to the "Shared Files" page, find the file you want to publish, then under the "Actions" menu select "Copy hash to clipboard".
-        Paste the file hash in the "Hash" field above.</p>
-        <p>Fill out the "Name" and "Description" fields, and press the "Publish" button.</p>
+        <div class="message">
+        	<div><h3>How to publish files</h3></div>
+        	<div>The file you want to publish needs to be shared with MuWire.</div>
+        	<div>If using the desktop client, go to the "Uploads" tab, find the file you want to publish, then right-click on it and select "Copy hash to clipboard".
+        		Paste the file hash in the "Hash" field above.</div>
+        	<div>If using the plugin, go to the "Shared Files" page, find the file you want to publish, then under the "Actions" menu select "Copy hash to clipboard".
+        		Paste the file hash in the "Hash" field above.</div>
+        	<div>Fill out the "Name" and "Description" fields, and press the "Publish" button.</div>
+        </div>
     </body>
 </html>
