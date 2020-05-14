@@ -21,12 +21,12 @@ Then go to `http://localhost:8080`
 ./gradlew clean assemble
 ```
 2. Look in `build/libs` there should be a file `mucats-x.y.war`.  Copy that to a folder somewhere.
-3. Copy `grails-app/conf/application.yml` to the same folder
-4. Edit the `application.yml` file and change `environments -> production -> dataSource -> dbCreate` to `update`
 
 You're ready to start your production deployment of MuCats!  Type `java -jar mucats-x.y.war`.
 
-You can configure many things from `application.yml` like different database backend and so on.  Look around the internet for guides how to do that.
+You can configure many things from a file called `application.yml` like different database backend and so on.  Look around the internet for guides how to do that.  To run MuCats with such custom configuration, copy `grails-app/conf/application.yml` to the same folder you copied the `war` file.
+
+
 
 ### Authentication
 
