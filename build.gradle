@@ -40,6 +40,7 @@ dependencies {
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     compile "org.grails.plugins:spring-security-core:4.0.0"
+    compile 'org.grails.plugins:grails-x-frame-options-plugin:1.1.0'
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.grails:grails-core"
