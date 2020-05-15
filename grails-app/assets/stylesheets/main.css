@@ -635,6 +635,22 @@ div.comment {
 	
 }
 
+div.fullId {
+	display: block;
+	float: left;
+	margin-right: 10px;
+}
+
+h3.profile {
+	text-align : center;
+}
+
+div.profile {
+	display: block;
+	text-align:initial;
+}
+
+
 .mytooltip {
 	position: relative;
 	display: inline-block;

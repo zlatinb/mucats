@@ -9,27 +9,26 @@
             <div class='errors'>${error}</div>
         </g:if>
         <g:else>
-            <sec:access expression="hasRole('ROLE_ADMIN')">
-                <g:link action="list">User List</g:link>
-            </sec:access>
-            <h3>${user.username}</h3>
-            <g:if test="${user.accountLocked}">
-                <p>Account Locked!</p>
-            </g:if>
-            <g:if test="${canEdit}">
-                <g:link action="edit" id="${user.id}">Edit Profile</g:link>
-            </g:if>
-            <hr/>
-            <g:if test="${user.showFullId}">
-                <p>Full ID:</p>
-                <textarea readonly>${user.personaB64}</textarea>
-            </g:if>
-            <g:else>
-                <p>This user has chosen not to show their Full ID</p>
-            </g:else>
-            <hr/>
-            <p>Public profile:</p>
-            <pre>${profile}</pre>
+        	<center>
+	            <h3 class="profile">${user.username}</h3>
+	            <g:if test="${user.accountLocked}">
+	                <div class="errors">Account Locked!</div>
+	            </g:if>
+		        <g:if test="${user.showFullId}">
+	            	<div class="fullId">
+		                Full ID:<br/>
+		                <textarea readonly>${user.personaB64}</textarea>
+	            	</div>
+		        </g:if>
+	            <div class="profile">
+		            Public profile	            
+		            <g:if test="${canEdit}">
+		                (<g:link action="edit" id="${user.id}">Edit</g:link>)
+		            </g:if>
+		            :<br/>
+		            <pre class="description">${profile}</pre>
+	            </div>
+            </center>
         </g:else>
     </body>
 </html>
