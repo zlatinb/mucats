@@ -16,7 +16,7 @@
             </ul>
         </g:hasErrors>
         <center>
-        <g:form action="save">
+        <g:form action="save" useToken="true">
             <label for="hash">Hash</label>
             <g:textField name="hash" required value="${publication?.hash}"/><br/>
             <label for="name">Name</label>

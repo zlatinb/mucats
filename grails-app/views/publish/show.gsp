@@ -31,7 +31,7 @@
             <hr/>
             <sec:ifLoggedIn>
             	<sec:access expression="principal.isAccountNonLocked()">
-    	            <g:form action="comment">
+    	            <g:form action="comment" useToken="true">
         	            <g:hiddenField name="pubId" value="${publication.id}"/>
             	        <g:textArea name="commentText"/>
                 	    <g:submitButton name="Comment"/>
