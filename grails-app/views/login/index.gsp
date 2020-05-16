@@ -11,7 +11,7 @@
 
 		<center>
         <h3>Copy-paste your full MuWire ID</h3>
-        <g:form>
+        <g:form useToken="true">
             <g:textArea name="personaB64" rows="10" cols="60"/>
             <br/>
             <g:actionSubmit value="submit" action="submituser" />

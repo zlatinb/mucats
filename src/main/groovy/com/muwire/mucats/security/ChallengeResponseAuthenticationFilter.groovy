@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpSession
 
+import org.grails.web.servlet.mvc.SynchronizerTokensHolder
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
@@ -27,6 +28,21 @@ class ChallengeResponseAuthenticationFilter extends AbstractAuthenticationProces
     throws AuthenticationException, IOException, ServletException {
 
         HttpSession session = request.getSession()
+        SynchronizerTokensHolder tokensHolder = session.getAttribute("SYNCHRONIZER_TOKENS_HOLDER")
+        if (!tokensHolder)
+            throw new AuthenticationException("inconsistent session") {}
+        String url = request.getParameter("SYNCHRONIZER_URI")
+        String token = request.getParameter("SYNCHRONIZER_TOKEN")
+        boolean valid = false
+        if (url && token) {
+            valid = tokensHolder.isValid(url, token)
+            tokensHolder.resetToken(url,token)
+        }
+        
+        if (!valid) {
+            response.sendError(403,"Duplicate form submission")
+            return null
+        }
         
         String personaB64 = request.getParameter("personaB64")
         if (personaB64 != null) {
