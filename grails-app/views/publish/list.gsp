@@ -7,7 +7,9 @@
 	<body>
 	
 	<g:render contextPath="/" template="navbar"/>
-
+<g:if test="${q}">
+	<p>Results for ${q}</p>
+</g:if>
 <g:if test="${total > 0}">
 <p>Total Publications ${total}</p>
     <table>
@@ -31,7 +33,7 @@
         </tbody>
     </table>
     <div class="pagination">
-        <g:paginate total="${total}"/>
+        <g:paginate total="${total}" params='[q : "${q}"]'/>
     </div>            
 </g:if>
 <g:else>

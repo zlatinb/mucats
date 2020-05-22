@@ -4,6 +4,10 @@
     </sec:ifNotLoggedIn>
     <sec:ifLoggedIn>
     	<sec:access expression="principal.isAccountNonLocked()">
+    		<g:form controller="publish" action="list">
+    			<g:textField name="q" placeholder="Search" value="${q}"/>
+    			<g:submitButton name="Search"/>
+    		</g:form>
         	<g:link controller="publish" action="create">Publish</g:link>
         </sec:access>
         <g:link controller="user">Profile</g:link>

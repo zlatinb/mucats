@@ -27,10 +27,32 @@ class PublishController {
             params['sort'] = "date"
         if (!params['order'])
             params['order'] = "desc"
-                
-        def publications = Publication.list(params)
         
-        [publications : publications, total : Publication.count()]
+        def publications
+        int total
+        if (params['q']) {
+            if (!springSecurityService.isLoggedIn()) {
+                flash.error = "You need to log in to search"
+                redirect(url: "/")
+                return
+            }
+            if (!springSecurityService.getPrincipal().isAccountNonLocked()) {
+                flash.error = "Your account is locked"
+                redirect(url : "/")
+                return
+            }
+            String q = params['q']
+            def query = Publication.where {
+                ( name =~ "%$q%" ) || (description =~ "%$q%")
+            }
+            publications = query.list(params)
+            total = query.count()
+        } else {       
+            publications = Publication.list(params)
+            total = Publication.count()
+        }
+        
+        [publications : publications, total : total, q : params.q]
     }
     
     @Secured("permitAll")
