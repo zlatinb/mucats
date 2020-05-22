@@ -16,8 +16,11 @@
             	</div>
             	<g:if test="${publication.description}">
 	            	<pre class="description">${publication.description}</pre>
+	            	<g:if test="${publication.lastEdited}">
+	            		<p>Last edited: ${publication.lastEdited}</p>
+	            	</g:if>
 	            	<g:if test="${canDelete}">
-                		<g:link action="edit" id="${publication.id}">Edit Description</g:link>
+	            		<p><g:link action="edit" id="${publication.id}">Edit Description</g:link></p>
                 	</g:if>
 	            </g:if>
 	            <g:else>

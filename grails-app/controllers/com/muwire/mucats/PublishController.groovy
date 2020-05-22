@@ -146,6 +146,7 @@ class PublishController {
                 render(view : "create", model : [publication : publication])
                 return
             }
+            publication.lastEdited = new Date()
             publication.save(flush : true)
             redirect(action : "show", id : publication.id)
         }.invalidToken {
