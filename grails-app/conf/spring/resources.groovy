@@ -3,10 +3,12 @@ import org.springframework.security.authentication.*
 import org.springframework.security.web.authentication.*
 import org.springframework.security.web.authentication.rememberme.*
 import grails.plugin.springsecurity.web.authentication.rememberme.*
+import org.springframework.web.servlet.i18n.*
 
 // Place your Spring DSL code here
 beans = {
 
+    localeResolver(FixedLocaleResolver, new Locale('en_US'))
     userCreator(UserCreatorService) {
         grailsApplication = ref('grailsApplication')
     }
