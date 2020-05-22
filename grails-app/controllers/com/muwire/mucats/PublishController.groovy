@@ -7,11 +7,12 @@ import com.muwire.mucats.security.RoleService
 import com.muwire.mucats.security.User
 import com.muwire.mucats.security.UserRoleService
 
+import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.annotation.Secured
 
 class PublishController {
     
-    static allowedMethods = [save : "POST", comment : "POST", delete : "POST"]
+    static allowedMethods = [save : "POST", saveEdited: "POST", comment : "POST", delete : "POST"]
     
     def springSecurityService
     RoleService roleService
@@ -96,6 +97,56 @@ class PublishController {
                 return
             }
             publication.save()
+            redirect(action : "show", id : publication.id)
+        }.invalidToken {
+            flash.error = "Duplicate submission"
+            render(view : "create", model : [])
+            return
+        }
+    }
+    
+    @Secured("isAuthenticated() && principal.isAccountNonLocked()")
+    def edit(long id) {
+        Publication publication = Publication.get(id)
+        if (publication == null) {
+            flash.error = "No such publication"
+            redirect (url : "/")
+            return
+        }
+        
+        User me = springSecurityService.getCurrentUser()
+        Role moderator = roleService.findByAuthority("ROLE_MODERATOR")
+        boolean canEdit = me.getAuthorities().contains(moderator)
+        canEdit |= publication.user.id == me.id
+        
+        if (!canEdit) {
+            flash.error = "You can't edit this publication"
+            redirect (url : "/")
+            return
+        }
+        
+        [publication : publication]
+    }
+    
+    @Secured("isAuthenticated() && principal.isAccountNonLocked()")
+    @Transactional
+    def saveEdited(long pubId, String description) {
+        withForm {
+            User me = springSecurityService.getCurrentUser()
+            Publication publication = Publication.get(pubId)
+            if (publication == null) {
+                flash.error = "No such publication"
+                redirect (url : "/")
+                return
+            }
+            publication.description = description
+            publication.validate()
+            if (publication.hasErrors()) {
+                flash.error = "Invalid submission"
+                render(view : "create", model : [publication : publication])
+                return
+            }
+            publication.save(flush : true)
             redirect(action : "show", id : publication.id)
         }.invalidToken {
             flash.error = "Duplicate submission"

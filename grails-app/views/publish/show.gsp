@@ -16,6 +16,9 @@
             	</div>
             	<g:if test="${publication.description}">
 	            	<pre class="description">${publication.description}</pre>
+	            	<g:if test="${canDelete}">
+                		<g:link action="edit" id="${publication.id}">Edit Description</g:link>
+                	</g:if>
 	            </g:if>
 	            <g:else>
 	            	<div>No description provided</div>
