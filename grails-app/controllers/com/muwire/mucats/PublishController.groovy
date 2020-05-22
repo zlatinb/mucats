@@ -27,10 +27,12 @@ class PublishController {
             params['sort'] = "date"
         if (!params['order'])
             params['order'] = "desc"
-        
+        if (!params['q'])
+            params['q'] = ""
+            
         def publications
         int total
-        if (params['q']) {
+        if (params['q'].trim().length() > 0) {
             if (!springSecurityService.isLoggedIn()) {
                 flash.error = "You need to log in to search"
                 redirect(url: "/")
