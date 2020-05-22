@@ -19,13 +19,13 @@
 	            	<g:if test="${publication.lastEdited}">
 	            		<p>Last edited: ${publication.lastEdited}</p>
 	            	</g:if>
-	            	<g:if test="${canDelete}">
-	            		<p><g:link action="edit" id="${publication.id}">Edit Description</g:link></p>
-                	</g:if>
 	            </g:if>
 	            <g:else>
 	            	<div>No description provided</div>
 	            </g:else>
+            	<g:if test="${canDelete}">
+            		<p><g:link action="edit" id="${publication.id}">Edit Description</g:link></p>
+            	</g:if>
             </div>
             <h3>Comments:</h3>
                 <g:each var="comment" in="${publication.comments}">
