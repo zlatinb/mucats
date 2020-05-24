@@ -23,6 +23,23 @@
             <g:textArea name="description">${publication?.description}</g:textArea><br/>
             <g:submitButton name="Save"/>
         </g:form>
+        <g:if test="${publication.image}">
+	    	<div class="mcimage">
+	    		<img src="<g:createLink controller="publish" action="image" id="${publication.image.id}"/>" width="400"/>
+        	</div>
+        	<g:form action="deleteImage">
+        		<g:hiddenField name="pubId" value="${publication.id}" />
+        		<g:submitButton name="Delete"/>
+        	</g:form>
+	    </g:if>
+	    <g:else>
+	        <p>Upload image</p>
+			<g:uploadForm controller="publish" action="uploadImage" useToken="true">
+				<g:hiddenField name="id" value="${publication.id}" />
+				<input type="file" name="imageFile" />
+				<input type="submit" value="Upload" />
+			</g:uploadForm>
+		</g:else>
         </center>
     </body>
 </html>

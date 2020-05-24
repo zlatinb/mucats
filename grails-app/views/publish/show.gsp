@@ -24,8 +24,13 @@
 	            	<div>No description provided</div>
 	            </g:else>
             	<g:if test="${canDelete}">
-            		<p><g:link action="edit" id="${publication.id}">Edit Description</g:link></p>
+            		<p><g:link action="edit" id="${publication.id}">Edit Publication</g:link></p>
             	</g:if>
+	            <g:if test="${publication.image}">
+	            	<div class="mcimage">
+	            		<img src="<g:createLink controller="publish" action="image" id="${publication.image.id}"/>" width="400"/>
+	            	</div>
+	            </g:if>
             </div>
             <h3>Comments:</h3>
                 <g:each var="comment" in="${publication.comments}">

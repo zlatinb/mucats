@@ -17,6 +17,7 @@ class PublishController {
     def springSecurityService
     RoleService roleService
     PublicationService publicationService
+    ImageService imageService
 
     @Secured("permitAll")
     def list() {
@@ -114,16 +115,8 @@ class PublishController {
             return
         }
         
-        User me = springSecurityService.getCurrentUser()
-        Role moderator = roleService.findByAuthority("ROLE_MODERATOR")
-        boolean canEdit = me.getAuthorities().contains(moderator)
-        canEdit |= publication.user.id == me.id
-        
-        if (!canEdit) {
-            flash.error = "You can't edit this publication"
-            redirect (url : "/")
+        if (!canEdit(publication))
             return
-        }
         
         [publication : publication]
     }
@@ -139,17 +132,8 @@ class PublishController {
                 return
             }
             
-            User me = springSecurityService.getCurrentUser()
-            Role moderator = roleService.findByAuthority("ROLE_MODERATOR")
-         
-            boolean canEdit = me.getAuthorities().contains(moderator)
-            canEdit |= publication.user.id == me.id
-            
-            if (!canEdit) {
-                flash.error = "You can't edit this publication"
-                redirect (url : "/")
+            if (!canEdit(publication))
                 return
-            }
             
             publication.description = description
             publication.validate()
@@ -163,9 +147,76 @@ class PublishController {
             redirect(action : "show", id : publication.id)
         }.invalidToken {
             flash.error = "Duplicate submission"
-            render(view : "create", model : [])
+            render(view : "list")
             return
         }
+    }
+    
+    private boolean canEdit(Publication publication) {
+        User me = springSecurityService.getCurrentUser()
+        Role moderator = roleService.findByAuthority("ROLE_MODERATOR")
+     
+        boolean canEdit = me.getAuthorities().contains(moderator)
+        canEdit |= publication.user.id == me.id
+        
+        if (!canEdit) {
+            flash.error = "You can't edit this publication"
+            redirect (url : "/")
+            return false
+        }
+        true
+    }
+    
+    @Secured("isAuthenticated() && principal.isAccountNonLocked()")
+    def uploadImage(ImageCommand command) {
+        withForm {
+            if (command == null) {
+                flash.error = "No such publication"
+                redirect(url: "/")
+                return
+            }
+            
+            Publication publication = Publication.get(command.id)
+            if (publication == null) {
+                flash.error = "No such publication"
+                redirect (url : "/")
+                return
+            }
+            
+            
+            if (command.hasErrors()) {
+                respond(command.errors, model : [publication : publication], view : "edit")
+                return
+            }
+            
+            if (!canEdit(publication))
+                return
+            
+            Image image = new Image(data : command.imageFile.bytes, type: command.imageFile.contentType)
+            
+            publication = publicationService.update(command.id, image)
+            if (publication.hasErrors()) {
+                respond(command.errors, model : [publication : publication], view : "edit")
+                return
+            }
+            
+            redirect(action : "show", id : publication.id)
+            
+        }.invalidToken {
+            flash.error = "Duplicate submission"
+            render(view : "list")
+        }
+    }
+    
+    @Secured("permitAll")
+    def image(Long id) {
+        Image image = Image.get(id)
+        if (!image) {
+            flash.error = "No such image"
+            redirect (url : "/")
+            return
+        }
+        render file:image.data, contentType:image.type
     }
     
     @Secured("isAuthenticated() && principal.isAccountNonLocked()")
@@ -206,16 +257,8 @@ class PublishController {
             redirect(url : "/")
             return
         }
-        User me = springSecurityService.getCurrentUser()
-        Role moderator = roleService.findByAuthority("ROLE_MODERATOR")
-        boolean canDelete = me.getAuthorities().contains(moderator)
-        canDelete |= publication.user.id == me.id
-        
-        if (!canDelete) {
-            flash.error("You can't delete this publication")
-            redirect(url : "/")
+        if (!canEdit(publication))
             return
-        }
         try {
             publicationService.delete(pubId)
             redirect(action : "list")
@@ -223,6 +266,27 @@ class PublishController {
             flash.message = "Could not delete publication"
             redirect(action : "show", id : pubId)
         }
-        
+    }
+    
+    @Secured("isAuthenticated() && principal.isAccountNonLocked()")
+    def deleteImage(Long pubId) {
+        Publication publication = Publication.get(pubId)
+        if (!publication || !publication.image) {
+            flash.error("No such publication/image")
+            redirect(url : "/")
+            return
+        }
+        if (!canEdit(publication))
+            return
+        try {
+            Long id = publication.image.id
+            publication.image = null
+            imageService.delete(id)
+            publicationService.update(pubId, null)
+        } catch (DataIntegrityViolationException e) {
+            flash.message = "Could not delete image"
+        } finally {
+            redirect(action : "show", id : pubId)
+        }
     }
 }

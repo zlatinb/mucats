@@ -7,13 +7,11 @@ import grails.validation.Validateable
 class ImageCommand implements Validateable {
     // these are to find the publication
     Long id 
-    Integer version
     
     MultipartFile imageFile
     
     static constraints = {
         id nullable : false
-        version nullable : false
         imageFile validator : { val, obj, errors ->
             if (val == null)
                 return false

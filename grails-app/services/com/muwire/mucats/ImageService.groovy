@@ -2,10 +2,9 @@ package com.muwire.mucats
 
 import grails.gorm.services.Service;
 
-@Service(Publication)
-interface PublicationService {
+@Service(Image)
+interface ImageService {
     
     void delete(Long id)
     
-    Publication update(Long id, Image image)
 }
