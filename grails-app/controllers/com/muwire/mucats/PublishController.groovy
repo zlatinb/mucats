@@ -22,7 +22,7 @@ class PublishController {
     def list() {
         if (!params['offset'])
             params['offset'] = 0
-        if (!params['max'])
+        if (!params['max'] || params['max'] > 20)
             params['max'] = 20
         if (!params['sort'])
             params['sort'] = "date"
@@ -132,13 +132,25 @@ class PublishController {
     @Transactional
     def saveEdited(long pubId, String description) {
         withForm {
-            User me = springSecurityService.getCurrentUser()
             Publication publication = Publication.get(pubId)
             if (publication == null) {
                 flash.error = "No such publication"
                 redirect (url : "/")
                 return
             }
+            
+            User me = springSecurityService.getCurrentUser()
+            Role moderator = roleService.findByAuthority("ROLE_MODERATOR")
+         
+            boolean canEdit = me.getAuthorities().contains(moderator)
+            canEdit |= publication.user.id == me.id
+            
+            if (!canEdit) {
+                flash.error = "You can't edit this publication"
+                redirect (url : "/")
+                return
+            }
+            
             publication.description = description
             publication.validate()
             if (publication.hasErrors()) {
