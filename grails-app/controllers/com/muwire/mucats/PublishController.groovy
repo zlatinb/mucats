@@ -23,7 +23,7 @@ class PublishController {
     def list() {
         if (!params['offset'])
             params['offset'] = 0
-        if (!params['max'] || params['max'] > 20)
+        if (!params['max'] || Integer.parseInt(params['max']) > 20)
             params['max'] = 20
         if (!params['sort'])
             params['sort'] = "date"
