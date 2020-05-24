@@ -679,3 +679,14 @@ div.TermsOfService {
 	display: table;
 	border: 1px solid black;
 }
+
+div#mysidebar {
+	height: 100%;
+	width: 150px;
+	overflow-x:hidden;
+	float:left;
+}
+
+div#myresults {
+	margin-left:150px;
+}

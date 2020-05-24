@@ -31,7 +31,10 @@ class PublishController {
             params['order'] = "desc"
         if (!params['q'])
             params['q'] = ""
-            
+        
+        
+        def featured = publicationService.findAllByFeatured(true)    
+                
         def publications
         int total
         if (params['q'].trim().length() > 0) {
@@ -56,7 +59,7 @@ class PublishController {
             total = Publication.count()
         }
         
-        [publications : publications, total : total, q : params.q]
+        [publications : publications, total : total, q : params.q, featured : featured]
     }
     
     @Secured("permitAll")
@@ -123,7 +126,7 @@ class PublishController {
     
     @Secured("isAuthenticated() && principal.isAccountNonLocked()")
     @Transactional
-    def saveEdited(long pubId, String description) {
+    def saveEdited(long pubId, String description, Boolean featured) {
         withForm {
             Publication publication = Publication.get(pubId)
             if (publication == null) {
@@ -134,6 +137,15 @@ class PublishController {
             
             if (!canEdit(publication))
                 return
+                
+            if (featured != null) {
+                if (!isModerator()) {
+                    flash.error = "You can't change featured status"
+                    redirect (url : "/")
+                    return
+                }
+                publication.featured = featured
+            }
             
             publication.description = description
             publication.validate()
@@ -153,11 +165,8 @@ class PublishController {
     }
     
     private boolean canEdit(Publication publication) {
-        User me = springSecurityService.getCurrentUser()
-        Role moderator = roleService.findByAuthority("ROLE_MODERATOR")
      
-        boolean canEdit = me.getAuthorities().contains(moderator)
-        canEdit |= publication.user.id == me.id
+        boolean canEdit = isModerator() || publication.user.id == me.id
         
         if (!canEdit) {
             flash.error = "You can't edit this publication"
@@ -165,6 +174,12 @@ class PublishController {
             return false
         }
         true
+    }
+    
+    private boolean isModerator() {
+        User me = springSecurityService.getCurrentUser()
+        Role moderator = roleService.findByAuthority("ROLE_MODERATOR")
+        me.getAuthorities().contains(moderator)
     }
     
     @Secured("isAuthenticated() && principal.isAccountNonLocked()")
