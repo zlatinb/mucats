@@ -48,6 +48,20 @@
                 	    <g:submitButton name="Comment"/>
                 	</g:form>
                 	<hr/>
+                	<sec:ifAllGranted roles="ROLE_MODERATOR">
+                		<g:if test="${publication.featured}">
+                			<g:form action="unfeature" useToken="true">
+                				<g:hiddenField name="pubId" value="${publication.id}"/>
+                				<g:submitButton name="Unfeature Publication"/>
+                			</g:form>
+                		</g:if>
+                		<g:else>
+                			<g:form action="feature" useToken="true">
+                				<g:hiddenField name="pubId" value="${publication.id}"/>
+                				<g:submitButton name="Feature Publication"/>
+                			</g:form>
+                		</g:else>
+                	</sec:ifAllGranted>
                 	<g:if test="${canDelete}">
                 		<g:form action="delete">
                 			<g:hiddenField name="pubId" value="${publication.id}"/>

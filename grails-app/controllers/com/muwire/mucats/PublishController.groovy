@@ -12,7 +12,8 @@ import grails.plugin.springsecurity.annotation.Secured
 
 class PublishController {
     
-    static allowedMethods = [save : "POST", saveEdited: "POST", comment : "POST", delete : "POST"]
+    static allowedMethods = [save : "POST", saveEdited: "POST", comment : "POST", delete : "POST", 
+        feature : "POST", unfeature : "POST"]
     
     def springSecurityService
     RoleService roleService
@@ -126,7 +127,7 @@ class PublishController {
     
     @Secured("isAuthenticated() && principal.isAccountNonLocked()")
     @Transactional
-    def saveEdited(long pubId, String description, Boolean featured) {
+    def saveEdited(long pubId, String description) {
         withForm {
             Publication publication = Publication.get(pubId)
             if (publication == null) {
@@ -137,15 +138,6 @@ class PublishController {
             
             if (!canEdit(publication))
                 return
-                
-            if (featured != null) {
-                if (!isModerator()) {
-                    flash.error = "You can't change featured status"
-                    redirect (url : "/")
-                    return
-                }
-                publication.featured = featured
-            }
             
             publication.description = description
             publication.validate()
@@ -209,7 +201,7 @@ class PublishController {
             
             Image image = new Image(data : command.imageFile.bytes, type: command.imageFile.contentType)
             
-            publication = publicationService.update(command.id, image)
+            publication = publicationService.update(command.id, image, publication.featured)
             if (publication.hasErrors()) {
                 respond(command.errors, model : [publication : publication], view : "edit")
                 return
@@ -297,11 +289,45 @@ class PublishController {
             Long id = publication.image.id
             publication.image = null
             imageService.delete(id)
-            publicationService.update(pubId, null)
+            publicationService.update(pubId, null, publication.featured)
         } catch (DataIntegrityViolationException e) {
             flash.message = "Could not delete image"
         } finally {
             redirect(action : "show", id : pubId)
+        }
+    }
+    
+    @Secured('ROLE_MODERATOR')
+    def feature(Long pubId) {
+        withForm {
+            Publication publication = publicationService.update(pubId, Publication.get(pubId).image, true)
+            if (publication == null) {
+                flash.error = "No such publication"
+                redirect (url : "/")
+                return
+            }
+            redirect(action : "list")
+        }.invalidToken {
+            flash.error = "Duplicate submission"
+            render (view : "show", model : [publication : publication])
+            return
+        }
+    }
+    
+    @Secured('ROLE_MODERATOR')
+    def unfeature(Long pubId) {
+        withForm {
+            Publication publication = publicationService.update(pubId, Publication.get(pubId).image, false)
+            if (publication == null) {
+                flash.error = "No such publication"
+                redirect (url : "/")
+                return
+            }
+            redirect(action : "list")
+        }.invalidToken {
+            flash.error = "Duplicate submission"
+            render (view : "show", model : [publication : publication])
+            return
         }
     }
 }

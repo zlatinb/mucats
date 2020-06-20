@@ -20,11 +20,6 @@
         <g:form action="saveEdited" useToken="true">
         	<g:hiddenField name="pubId" value="${publication.id}"/>
         	
-        	<sec:ifAllGranted roles="ROLE_MODERATOR">
-        		<label for="featured">Featured</label>
-        		<input type="checkbox" name="featured" <g:if test="${publication.featured}">checked</g:if> /><br/>
-        	</sec:ifAllGranted>
-        	
             <label for="description">Description</label>
             <g:textArea name="description">${publication?.description}</g:textArea><br/>
             <g:submitButton name="Save"/>
