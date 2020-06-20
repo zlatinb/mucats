@@ -28,7 +28,7 @@
             	</g:if>
 	            <g:if test="${publication.image}">
 	            	<div class="mcimage">
-	            		<img src="<g:createLink controller="publish" action="image" id="${publication.image.id}"/>" width="400"/>
+	            		<img src="<g:createLink controller="publish" action="image" id="${publication.image.id}"/>" width="140"/>
 	            	</div>
 	            </g:if>
             </div>
