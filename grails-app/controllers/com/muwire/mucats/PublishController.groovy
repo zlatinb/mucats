@@ -37,7 +37,9 @@ class PublishController {
         List<Publication> featured = publicationService.findAllByFeatured(true)
         
         featured.sort({l, r ->
-            return Long.compare(r.featuredDate, l.featuredDate)
+            long ld = l.featuredDate != null ? l.featuredDate : 0
+            long rd = r.featuredDate != null ? r.featuredDate : 0
+            return Long.compare(rd, ld)
         })
                 
         def publications

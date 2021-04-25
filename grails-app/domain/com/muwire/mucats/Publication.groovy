@@ -22,6 +22,7 @@ class Publication {
         lastEdited nullable : true
         image nullable : true
         featured nullable : true
+        featuredDate nullable: true
         hash blank : false, unique : true, validator : {val, obj, errors -> 
             try {
                 new InfoHash(Base64.decode(val))
