@@ -34,7 +34,7 @@ class PublishController {
             params['q'] = ""
         
         
-        def featured = publicationService.findAllByFeatured(true)    
+        def featured = publicationService.findAllByFeatured(true).reverse() 
                 
         def publications
         int total
