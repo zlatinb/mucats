@@ -14,6 +14,7 @@ class Publication {
     Date lastEdited
     Image image
     Boolean featured
+    Long featuredDate = 0
 
     static constraints = {
         name nullable : false, blank : false, size: 1..128

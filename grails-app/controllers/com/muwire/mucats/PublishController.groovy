@@ -34,7 +34,11 @@ class PublishController {
             params['q'] = ""
         
         
-        def featured = publicationService.findAllByFeatured(true).reverse() 
+        List<Publication> featured = publicationService.findAllByFeatured(true)
+        
+        featured.sort({l, r ->
+            return Long.compare(r.featuredDate, l.featuredDate)
+        })
                 
         def publications
         int total
@@ -298,13 +302,20 @@ class PublishController {
     }
     
     @Secured('ROLE_MODERATOR')
+    @Transactional
     def feature(Long pubId) {
         withForm {
-            Publication publication = publicationService.update(pubId, Publication.get(pubId).image, true)
+            Publication publication = Publication.get(pubId)
             if (publication == null) {
                 flash.error = "No such publication"
                 redirect (url : "/")
                 return
+            }
+            boolean wasFeatured = publication.featured
+            publication = publicationService.update(pubId, Publication.get(pubId).image, true)
+            if (!wasFeatured) {
+                publication.featuredDate = System.currentTimeMillis()
+                publication.save()
             }
             redirect(action : "list")
         }.invalidToken {
