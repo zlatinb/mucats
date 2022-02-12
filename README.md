@@ -1,5 +1,9 @@
 The GitHub repo is a read-only mirror of the in-I2P repo at http://git.idk.i2p/zlatinb/mucats .  Please open issues or pull requests there.
 
+# Important - Log4j vulnerability
+
+MuCats may be vulnerable to the log4j vulnerability (CVE-2021-44228).  Make sure you set the `LOG4J_FORMAT_MSG_NO_LOOKUPS` environment variable to `true` before running MuCats.
+
 # MuCats
 
 Website for hosting hashes of cat videos and other files shared on the MuWire network
